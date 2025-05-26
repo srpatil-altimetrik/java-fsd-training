@@ -40,6 +40,21 @@ public class AbstractionExample {
 		System.out.println();
 		
 		
+		CarInterface petrolCar = new PetrolCarImpl("BS4", 4, 70);
+		petrolCar.displayFuelStatus();
+		petrolCar.start();
+		petrolCar.drive();
+		petrolCar.stop();
+
+		System.out.println();
+		System.out.println("++++++++++++++++++++++++++++");
+		System.out.println();
+		
+		CarInterface diselCar = new DiselCarImpl("BS2", 3, 50);
+		diselCar.displayFuelStatus();
+		diselCar.start();
+		diselCar.drive();
+		diselCar.stop();
 		
 	}
 }

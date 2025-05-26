@@ -39,5 +39,7 @@ public class AbstractionExample {
 		System.out.println("++++++++++Using Interface++++++++++");
 		System.out.println();
 		
+		
+		
 	}
 }

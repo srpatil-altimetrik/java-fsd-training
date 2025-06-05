@@ -14,6 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,7 +30,14 @@ public class SecurityConfig {
 
 	@Bean
 	SecurityFilterChain defailtSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((requests) -> requests.requestMatchers("/h2-console/**").permitAll() //It permits the all request coming towards 																							// h2-console
+		http.authorizeHttpRequests((requests) -> requests.requestMatchers("/h2-console/**").permitAll() /*
+																										 * It permits
+																										 * the all
+																										 * request
+																										 * coming
+																										 * towards
+																										 * h2-console
+																										 */
 				.anyRequest().authenticated());
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 //		http.formLogin(withDefaults());
@@ -40,12 +49,17 @@ public class SecurityConfig {
 
 	@Bean
 	public UserDetailsService userDetailsService() {
-		UserDetails user = User.withUsername("user").password("{noop}Pass@1234").roles("USER").build();
-		UserDetails admin = User.withUsername("admin").password("{noop}Pass@1234").roles("ADMIN").build();
+		UserDetails user = User.withUsername("user").password(passwordEncoder().encode("Pass@1234")).roles("USER").build();
+		UserDetails admin = User.withUsername("admin").password(passwordEncoder().encode("Pass@1234")).roles("ADMIN").build();
 
 		JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
 		userDetailsManager.createUser(user);
 		userDetailsManager.createUser(admin);
 		return userDetailsManager;
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }
